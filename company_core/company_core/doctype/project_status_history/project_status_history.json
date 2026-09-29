@@ -1,0 +1,90 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "PSH-.#####",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "project",
+    "old_status",
+    "new_status",
+    "changed_at",
+    "changed_by",
+    "reason"
+  ],
+  "fields": [
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Project",
+      "options": "Project",
+      "reqd": 1,
+      "search_index": 1
+    },
+    {
+      "fieldname": "old_status",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Old Status",
+      "read_only": 1
+    },
+    {
+      "fieldname": "new_status",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "New Status",
+      "read_only": 1,
+      "reqd": 1
+    },
+    {
+      "fieldname": "changed_at",
+      "fieldtype": "Datetime",
+      "in_list_view": 1,
+      "label": "Changed At",
+      "read_only": 1,
+      "reqd": 1
+    },
+    {
+      "fieldname": "changed_by",
+      "fieldtype": "Link",
+      "label": "Changed By",
+      "options": "User",
+      "read_only": 1,
+      "reqd": 1
+    },
+    {
+      "fieldname": "reason",
+      "fieldtype": "Small Text",
+      "label": "Reason",
+      "read_only": 1,
+      "reqd": 1
+    }
+  ],
+  "index_web_pages_for_search": 0,
+  "links": [],
+  "module": "Company Core",
+  "name": "Project Status History",
+  "naming_rule": "Expression",
+  "permissions": [
+    {
+      "read": 1,
+      "role": "Company Owner",
+      "select": 1
+    },
+    {
+      "read": 1,
+      "role": "Company User",
+      "select": 1
+    },
+    {
+      "read": 1,
+      "role": "System Manager",
+      "select": 1
+    }
+  ],
+  "sort_field": "changed_at",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 0
+}

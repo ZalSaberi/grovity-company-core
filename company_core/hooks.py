@@ -272,3 +272,75 @@ has_permission = {
     "Project": "company_core.permissions.has_project_permission",
     "Project Membership": "company_core.permissions.has_project_membership_permission",
 }
+
+
+# === GROVITY PHASE 2B STATUS HISTORY ===
+
+permission_query_conditions = globals().get(
+    "permission_query_conditions",
+    {},
+)
+
+permission_query_conditions.update(
+    {
+        "Project": (
+            "company_core.permissions."
+            "get_project_permission_query_conditions"
+        ),
+        "Project Membership": (
+            "company_core.permissions."
+            "get_project_membership_permission_query_conditions"
+        ),
+        "Project Status History": (
+            "company_core.permissions."
+            "get_project_status_history_permission_query_conditions"
+        ),
+    }
+)
+
+
+has_permission = globals().get(
+    "has_permission",
+    {},
+)
+
+has_permission.update(
+    {
+        "Project": (
+            "company_core.permissions."
+            "has_project_permission"
+        ),
+        "Project Membership": (
+            "company_core.permissions."
+            "has_project_membership_permission"
+        ),
+        "Project Status History": (
+            "company_core.permissions."
+            "has_project_status_history_permission"
+        ),
+    }
+)
+
+
+doc_events = globals().get(
+    "doc_events",
+    {},
+)
+
+doc_events.setdefault(
+    "Project",
+    {},
+)
+
+doc_events["Project"].update(
+    {
+        "before_save": (
+            "company_core.project_events."
+            "validate_project_status_change"
+        ),
+        "on_update": (
+            "company_core.project_events."
+            "record_project_status_change"
+        ),
+    }
+)
