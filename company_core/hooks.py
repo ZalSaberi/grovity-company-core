@@ -262,3 +262,13 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+permission_query_conditions = {
+    "Project": "company_core.permissions.get_project_permission_query_conditions",
+    "Project Membership": "company_core.permissions.get_project_membership_permission_query_conditions",
+}
+
+
+has_permission = {
+    "Project": "company_core.permissions.has_project_permission",
+    "Project Membership": "company_core.permissions.has_project_membership_permission",
+}
