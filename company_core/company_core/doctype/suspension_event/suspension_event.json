@@ -1,0 +1,98 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "SUSP-.#####",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "project",
+    "start_date",
+    "end_date",
+    "reason_category",
+    "description",
+    "responsible_side",
+    "approved_by"
+  ],
+  "fields": [
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Project",
+      "options": "Project",
+      "reqd": 1,
+      "search_index": 1
+    },
+    {
+      "fieldname": "start_date",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Start Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "end_date",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "End Date"
+    },
+    {
+      "fieldname": "reason_category",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Reason Category",
+      "options": "Customer\nFinancial\nTechnical\nTeam\nHardware Procurement\nAdministrative\nLegal\nInternal Management\nOther",
+      "reqd": 1
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Small Text",
+      "label": "Description"
+    },
+    {
+      "fieldname": "responsible_side",
+      "fieldtype": "Data",
+      "label": "Responsible Side"
+    },
+    {
+      "fieldname": "approved_by",
+      "fieldtype": "Link",
+      "label": "Approved By",
+      "options": "User"
+    }
+  ],
+  "index_web_pages_for_search": 0,
+  "links": [],
+  "module": "Company Core",
+  "name": "Suspension Event",
+  "naming_rule": "Expression",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "read": 1,
+      "role": "Company Owner",
+      "select": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "read": 1,
+      "role": "Company User",
+      "select": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "read": 1,
+      "role": "System Manager",
+      "select": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "start_date",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}

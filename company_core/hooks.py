@@ -344,3 +344,35 @@ doc_events["Project"].update(
         ),
     }
 )
+
+
+# === GROVITY PHASE 2C SUSPENSION EVENT ===
+
+permission_query_conditions = globals().get(
+    "permission_query_conditions",
+    {},
+)
+
+permission_query_conditions.update(
+    {
+        "Suspension Event": (
+            "company_core.permissions."
+            "get_suspension_event_permission_query_conditions"
+        ),
+    }
+)
+
+
+has_permission = globals().get(
+    "has_permission",
+    {},
+)
+
+has_permission.update(
+    {
+        "Suspension Event": (
+            "company_core.permissions."
+            "has_suspension_event_permission"
+        ),
+    }
+)

@@ -225,3 +225,67 @@ def has_project_status_history_permission(
         project,
         user,
     )
+
+
+def get_suspension_event_permission_query_conditions(
+    user=None,
+):
+    user = user or frappe.session.user
+
+    if is_privileged_user(user):
+        return ""
+
+    escaped_user = frappe.db.escape(user)
+
+    return f"""
+        EXISTS (
+            SELECT 1
+            FROM `tabProject Membership` pm
+            WHERE pm.project =
+                `tabSuspension Event`.project
+              AND pm.user = {escaped_user}
+              AND pm.status = 'Active'
+        )
+    """
+
+
+def has_suspension_event_permission(
+    doc,
+    user=None,
+    ptype=None,
+    **kwargs,
+):
+    user = user or frappe.session.user
+
+    if is_privileged_user(user):
+        return True
+
+    project = getattr(
+        doc,
+        "project",
+        None,
+    )
+
+    if not project:
+        return False
+
+    if ptype in (
+        None,
+        "read",
+        "select",
+    ):
+        return has_active_project_membership(
+            project,
+            user,
+        )
+
+    if ptype in (
+        "create",
+        "write",
+    ):
+        return is_active_project_manager(
+            project,
+            user,
+        )
+
+    return False
