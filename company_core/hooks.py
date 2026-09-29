@@ -376,3 +376,49 @@ has_permission.update(
         ),
     }
 )
+
+# === GROVITY PHASE 2D TASK CORE ===
+
+permission_query_conditions = globals().get(
+    "permission_query_conditions",
+    {},
+)
+permission_query_conditions.update(
+    {
+        "Task": (
+            "company_core.permissions."
+            "get_task_permission_query_conditions"
+        ),
+    }
+)
+
+has_permission = globals().get(
+    "has_permission",
+    {},
+)
+has_permission.update(
+    {
+        "Task": (
+            "company_core.permissions."
+            "has_task_permission"
+        ),
+    }
+)
+
+doc_events = globals().get(
+    "doc_events",
+    {},
+)
+doc_events.setdefault(
+    "Task",
+    {},
+)
+doc_events["Task"].update(
+    {
+        "validate": (
+            "company_core.task_events."
+            "validate_task_extensions"
+        ),
+    }
+)
+
