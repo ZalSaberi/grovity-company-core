@@ -422,3 +422,18 @@ doc_events["Task"].update(
     }
 )
 
+# === GROVITY PHASE 2E PROJECT VIEWS ===
+
+doctype_js = globals().get(
+    "doctype_js",
+    {},
+)
+
+doctype_js.update(
+    {
+        "Project": (
+            "public/js/project_control.js"
+        ),
+    }
+)
+
