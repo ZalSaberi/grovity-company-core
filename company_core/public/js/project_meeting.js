@@ -25,6 +25,48 @@ frappe.ui.form.on("Project Meeting", {
 
         if (
             frm.doc.pm_confirmation
+            && !frm.doc.summary_published
+        ) {
+            frm.add_custom_button(
+                __("Publish Summary"),
+                () => {
+                    frappe.confirm(
+                        __("Publish the meeting summary to all meeting participants?"),
+                        () => {
+                            frappe.call({
+                                method: (
+                                    "company_core.operations_service."
+                                    + "publish_meeting_summary"
+                                ),
+                                args: {meeting: frm.doc.name},
+                                freeze: true,
+                                freeze_message: __("Publishing meeting summary..."),
+                                callback(r) {
+                                    if (r.message) {
+                                        frappe.msgprint({
+                                            title: __("Meeting Summary Published"),
+                                            indicator: "green",
+                                            message: __(
+                                                "Summary recipients: {0}<br>Action notifications: {1}",
+                                                [
+                                                    r.message.summary_recipients || 0,
+                                                    r.message.action_notifications || 0,
+                                                ]
+                                            ),
+                                        });
+                                    }
+                                    frm.reload_doc();
+                                },
+                            });
+                        }
+                    );
+                },
+                __("Notifications")
+            );
+        }
+
+        if (
+            frm.doc.pm_confirmation
             && !frm.doc.ceo_confirmation
         ) {
             frm.add_custom_button(

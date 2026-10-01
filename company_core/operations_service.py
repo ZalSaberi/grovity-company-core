@@ -1,7 +1,13 @@
+from __future__ import annotations
+
+import re
+from html import escape, unescape
+
 import frappe
 from frappe import _
-from frappe.utils import now_datetime
+from frappe.utils import get_datetime, now_datetime
 
+from company_core.notification_engine import dispatch_events
 from company_core.permissions import (
     is_active_project_manager,
     is_privileged_user,
@@ -23,6 +29,62 @@ def _get_doc_with_permission(doctype, name, ptype="read"):
         )
 
     return doc
+
+
+def _plain_html(value):
+    return " ".join(
+        unescape(
+            re.sub(r"<[^>]+>", " ", str(value or ""))
+        ).split()
+    )
+
+
+def _project_label(project):
+    return (
+        frappe.db.get_value("Project", project, "project_name")
+        or project
+        or ""
+    )
+
+
+def _meeting_action_snapshot(meeting_name):
+    actions = frappe.get_all(
+        "Meeting Action",
+        filters={
+            "meeting": meeting_name,
+            "status": ["!=", "Cancelled"],
+        },
+        fields=[
+            "name",
+            "description",
+            "assigned_to",
+            "deadline",
+            "priority",
+            "status",
+        ],
+        order_by="deadline asc, creation asc",
+        limit=0,
+    )
+
+    if not actions:
+        return actions, "اقدامی ثبت نشده است.", "<p>اقدامی ثبت نشده است.</p>"
+
+    text_lines = []
+    html_rows = []
+    for index, action in enumerate(actions, 1):
+        description = _plain_html(action.description)
+        text_lines.append(
+            f"{index}. {description} | مسئول: {action.assigned_to} | موعد: {action.deadline}"
+        )
+        html_rows.append(
+            "<li>"
+            f"<strong>{escape(description)}</strong><br>"
+            f"مسئول: {escape(action.assigned_to or '')}<br>"
+            f"موعد: {escape(str(action.deadline or ''))}"
+            "</li>"
+        )
+
+    return actions, "\n".join(text_lines), "<ol>" + "".join(html_rows) + "</ol>"
 
 
 @frappe.whitelist()
@@ -76,6 +138,123 @@ def confirm_meeting_as_ceo(meeting):
     doc.ceo_confirmation = 1
     doc.save(ignore_permissions=True)
     return doc.name
+
+
+@frappe.whitelist()
+def publish_meeting_summary(meeting):
+    doc = _get_doc_with_permission(
+        "Project Meeting",
+        meeting,
+        "write",
+    )
+
+    if not (
+        is_active_project_manager(doc.project, frappe.session.user)
+        or is_privileged_user(frappe.session.user)
+    ):
+        frappe.throw(
+            _("Only the Project Manager can publish the meeting summary."),
+            frappe.PermissionError,
+        )
+
+    if doc.summary_published:
+        return {
+            "meeting": doc.name,
+            "already_published": True,
+            "summary_recipients": 0,
+            "action_notifications": 0,
+        }
+
+    if not doc.pm_confirmation:
+        frappe.throw(
+            _("PM confirmation is required before publishing the meeting summary.")
+        )
+
+    if get_datetime(doc.meeting_datetime) > now_datetime():
+        frappe.throw(
+            _("The meeting summary cannot be published before the meeting time.")
+        )
+
+    if not _plain_html(doc.summary):
+        frappe.throw(
+            _("Meeting Summary is required before publication.")
+        )
+
+    participants = sorted({
+        row.user
+        for row in (doc.participants or [])
+        if row.user and row.user != "Guest"
+    })
+    if not participants:
+        frappe.throw(
+            _("At least one Meeting Participant is required before publication.")
+        )
+
+    actions, action_items, action_items_html = _meeting_action_snapshot(doc.name)
+    project_name = _project_label(doc.project)
+
+    doc.flags.publication_service = True
+    doc.summary_published = 1
+    doc.summary_published_at = now_datetime()
+    doc.summary_published_by = frappe.session.user
+    doc.save(ignore_permissions=True)
+
+    summary_event = frappe._dict({
+        "source_doctype": "Project Meeting",
+        "source_name": doc.name,
+        "project": doc.project,
+        "event_code": "MEETING_SUMMARY_PUBLISHED",
+        "stage": "",
+        "recipients": participants,
+        "context": {
+            "project_name": project_name,
+            "meeting_datetime": doc.meeting_datetime,
+            "meeting_title": _plain_html(doc.agenda) or doc.name,
+            "meeting_summary": doc.summary or "",
+            "decisions": doc.decisions or "<p>—</p>",
+            "action_items": action_items,
+            "action_items_html": action_items_html,
+            "item_title": doc.name,
+            "status": doc.status,
+        },
+    })
+
+    events = [summary_event]
+    for action in actions:
+        if not action.assigned_to:
+            continue
+        events.append(
+            frappe._dict({
+                "source_doctype": "Meeting Action",
+                "source_name": action.name,
+                "project": doc.project,
+                "event_code": "MEETING_ACTION_ASSIGNED",
+                "stage": "",
+                "recipients": [action.assigned_to],
+                "context": {
+                    "project_name": project_name,
+                    "item_type": "اقدام جلسه",
+                    "item_title": _plain_html(action.description),
+                    "deadline": action.deadline,
+                    "assigned_to": action.assigned_to,
+                    "priority": action.priority or "",
+                    "status": action.status or "",
+                    "meeting_datetime": doc.meeting_datetime,
+                    "meeting_title": _plain_html(doc.agenda) or doc.name,
+                },
+            })
+        )
+
+    result = dispatch_events(events)
+    frappe.db.commit()
+
+    return {
+        "meeting": doc.name,
+        "already_published": False,
+        "summary_recipients": len(participants),
+        "action_notifications": len(events) - 1,
+        "delivery_result": result,
+    }
 
 
 @frappe.whitelist()
@@ -189,4 +368,26 @@ def review_progress_report(report, decision, comment=None):
         doc.approved_at = None
 
     doc.save(ignore_permissions=True)
+
+    if decision == "Revision Requested" and doc.submitted_by:
+        event = frappe._dict({
+            "source_doctype": "Progress Report",
+            "source_name": doc.name,
+            "project": doc.project,
+            "event_code": "PROGRESS_REPORT_REVISION_REQUESTED",
+            "event_token": str(doc.modified),
+            "stage": "",
+            "recipients": [doc.submitted_by],
+            "context": {
+                "project_name": _project_label(doc.project),
+                "item_type": "گزارش پیشرفت",
+                "item_title": doc.name,
+                "report_period": doc.period,
+                "manager_comment": doc.manager_comment,
+                "status": doc.approval_status,
+                "assigned_to": doc.submitted_by,
+            },
+        })
+        dispatch_events([event])
+
     return doc.name

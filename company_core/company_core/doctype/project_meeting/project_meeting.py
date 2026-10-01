@@ -12,6 +12,12 @@ PROTECTED_FIELDS = (
     "decisions",
 )
 
+PUBLISHED_CONTENT_FIELDS = (
+    "participants",
+    "summary",
+    "decisions",
+)
+
 
 class ProjectMeeting(Document):
     def before_insert(self):
@@ -20,11 +26,16 @@ class ProjectMeeting(Document):
 
         self.pm_confirmation = 0
         self.ceo_confirmation = 0
+        self.summary_published = 0
+        self.summary_published_at = None
+        self.summary_published_by = None
         self.status = "Draft"
 
     def validate(self):
         self._validate_participants()
         self._validate_confirmation_changes()
+        self._validate_publication_changes()
+        self._validate_published_summary_lock()
         self._validate_final_lock()
         self._sync_status()
 
@@ -86,6 +97,44 @@ class ProjectMeeting(Document):
             frappe.throw(
                 _("PM confirmation is required before CEO confirmation.")
             )
+
+    def _validate_publication_changes(self):
+        previous = self.get_doc_before_save()
+
+        if not previous:
+            return
+
+        changed = (
+            previous.summary_published != self.summary_published
+            or previous.summary_published_at != self.summary_published_at
+            or previous.summary_published_by != self.summary_published_by
+        )
+
+        if changed and not getattr(
+            self.flags,
+            "publication_service",
+            False,
+        ):
+            frappe.throw(
+                _(
+                    "Meeting summary publication fields must be changed "
+                    "using the Publish Summary action."
+                )
+            )
+
+    def _validate_published_summary_lock(self):
+        previous = self.get_doc_before_save()
+
+        if not previous or not previous.summary_published:
+            return
+
+        for fieldname in PUBLISHED_CONTENT_FIELDS:
+            if previous.get(fieldname) != self.get(fieldname):
+                frappe.throw(
+                    _(
+                        "Published meeting summary content cannot be edited directly."
+                    )
+                )
 
     def _validate_final_lock(self):
         previous = self.get_doc_before_save()

@@ -11,6 +11,10 @@
     "agenda",
     "summary",
     "decisions",
+    "publication_section",
+    "summary_published",
+    "summary_published_at",
+    "summary_published_by",
     "prepared_by",
     "pm_confirmation",
     "ceo_confirmation",
@@ -83,6 +87,31 @@
       "in_list_view": 1,
       "label": "Status",
       "options": "Draft\nPM Confirmed\nFinal",
+      "read_only": 1
+    },
+    {
+      "fieldname": "publication_section",
+      "fieldtype": "Section Break",
+      "label": "Summary Publication"
+    },
+    {
+      "default": "0",
+      "fieldname": "summary_published",
+      "fieldtype": "Check",
+      "label": "Summary Published",
+      "read_only": 1
+    },
+    {
+      "fieldname": "summary_published_at",
+      "fieldtype": "Datetime",
+      "label": "Summary Published At",
+      "read_only": 1
+    },
+    {
+      "fieldname": "summary_published_by",
+      "fieldtype": "Link",
+      "label": "Summary Published By",
+      "options": "User",
       "read_only": 1
     }
   ],

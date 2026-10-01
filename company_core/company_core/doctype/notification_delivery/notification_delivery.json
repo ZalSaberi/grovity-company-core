@@ -10,6 +10,7 @@
     "source_name",
     "project",
     "stage",
+    "event_code",
     "channel",
     "recipient_user",
     "destination",
@@ -136,6 +137,13 @@
       "fieldtype": "Long Text",
       "label": "Last Error",
       "read_only": 1
+    },
+    {
+      "fieldname": "event_code",
+      "fieldtype": "Data",
+      "label": "Event Code",
+      "read_only": 1,
+      "search_index": 1
     }
   ],
   "index_web_pages_for_search": 0,

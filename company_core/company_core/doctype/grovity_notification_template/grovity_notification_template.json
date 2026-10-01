@@ -1,0 +1,140 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "field:event_code",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "identity_section",
+    "event_code",
+    "template_name",
+    "enabled",
+    "channels_section",
+    "enable_in_app",
+    "enable_email",
+    "enable_sms",
+    "content_section",
+    "in_app_subject",
+    "email_subject",
+    "email_body",
+    "sms_body",
+    "help_section",
+    "available_variables"
+  ],
+  "fields": [
+    {
+      "fieldname": "identity_section",
+      "fieldtype": "Section Break",
+      "label": "Identity"
+    },
+    {
+      "fieldname": "event_code",
+      "fieldtype": "Data",
+      "label": "Event Code",
+      "reqd": 1,
+      "read_only": 1,
+      "unique": 1,
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "template_name",
+      "fieldtype": "Data",
+      "label": "Template Name",
+      "reqd": 1,
+      "in_list_view": 1
+    },
+    {
+      "default": "1",
+      "fieldname": "enabled",
+      "fieldtype": "Check",
+      "label": "Enabled",
+      "in_list_view": 1
+    },
+    {
+      "fieldname": "channels_section",
+      "fieldtype": "Section Break",
+      "label": "Channels"
+    },
+    {
+      "default": "1",
+      "fieldname": "enable_in_app",
+      "fieldtype": "Check",
+      "label": "Enable In-App"
+    },
+    {
+      "default": "1",
+      "fieldname": "enable_email",
+      "fieldtype": "Check",
+      "label": "Enable Email"
+    },
+    {
+      "default": "0",
+      "fieldname": "enable_sms",
+      "fieldtype": "Check",
+      "label": "Enable SMS"
+    },
+    {
+      "fieldname": "content_section",
+      "fieldtype": "Section Break",
+      "label": "Templates"
+    },
+    {
+      "fieldname": "in_app_subject",
+      "fieldtype": "Small Text",
+      "label": "In-App Subject",
+      "reqd": 1
+    },
+    {
+      "fieldname": "email_subject",
+      "fieldtype": "Small Text",
+      "label": "Email Subject",
+      "reqd": 1
+    },
+    {
+      "fieldname": "email_body",
+      "fieldtype": "Text Editor",
+      "label": "Email Body",
+      "reqd": 1
+    },
+    {
+      "fieldname": "sms_body",
+      "fieldtype": "Small Text",
+      "label": "SMS Body"
+    },
+    {
+      "fieldname": "help_section",
+      "fieldtype": "Section Break",
+      "label": "Template Variables"
+    },
+    {
+      "fieldname": "available_variables",
+      "fieldtype": "Small Text",
+      "label": "Available Variables",
+      "read_only": 1
+    }
+  ],
+  "index_web_pages_for_search": 0,
+  "links": [],
+  "module": "Company Core",
+  "name": "Grovity Notification Template",
+  "naming_rule": "By fieldname",
+  "permissions": [
+    {
+      "read": 1,
+      "role": "Company Owner",
+      "select": 1,
+      "write": 1
+    },
+    {
+      "read": 1,
+      "role": "System Manager",
+      "select": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "event_code",
+  "sort_order": "ASC",
+  "states": [],
+  "title_field": "template_name",
+  "track_changes": 1
+}

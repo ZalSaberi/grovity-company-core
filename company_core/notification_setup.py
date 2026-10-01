@@ -1,5 +1,7 @@
 import frappe
 
+from company_core.notification_templates import ensure_default_templates
+
 
 DEFAULTS = {
     "enable_in_app": 1,
@@ -24,5 +26,16 @@ def ensure_notification_settings():
             changed = True
     if changed:
         doc.save(ignore_permissions=True)
-        frappe.db.commit()
-    return {fieldname: doc.get(fieldname) for fieldname in DEFAULTS}
+
+    template_result = ensure_default_templates()
+    frappe.db.commit()
+
+    result = {
+        "settings": {
+            fieldname: doc.get(fieldname)
+            for fieldname in DEFAULTS
+        },
+        "templates": template_result,
+    }
+    print(result)
+    return result

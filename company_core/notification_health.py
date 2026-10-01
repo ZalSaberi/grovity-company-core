@@ -1,8 +1,18 @@
 import frappe
 
+from company_core.notification_templates import EVENT_CODES
+
 
 def _outgoing_email_configured():
-    return bool(frappe.db.exists("Email Account", {"enable_outgoing": 1}))
+    return bool(
+        frappe.db.exists(
+            "Email Account",
+            {
+                "enable_outgoing": 1,
+                "default_outgoing": 1,
+            },
+        )
+    )
 
 
 def _sms_configured():
@@ -14,7 +24,11 @@ def _sms_configured():
 
 
 def run():
-    for doctype in ("Grovity Notification Settings", "Notification Delivery"):
+    for doctype in (
+        "Grovity Notification Settings",
+        "Grovity Notification Template",
+        "Notification Delivery",
+    ):
         if not frappe.db.exists("DocType", doctype):
             raise RuntimeError(f"Missing DocType: {doctype}")
 
@@ -31,13 +45,34 @@ def run():
         if job not in hook_text:
             raise RuntimeError(f"Missing scheduler job: {job}")
 
+    existing_templates = set(
+        frappe.get_all(
+            "Grovity Notification Template",
+            filters={"event_code": ["in", list(EVENT_CODES)]},
+            pluck="event_code",
+            limit=0,
+        )
+    )
+    missing_templates = [
+        code for code in EVENT_CODES
+        if code not in existing_templates
+    ]
+    if missing_templates:
+        raise RuntimeError(
+            "Missing notification templates: "
+            + ", ".join(missing_templates)
+        )
+
     result = {
         "status": "ok",
         "email_outgoing_configured": _outgoing_email_configured(),
+        "email_default_outgoing_configured": _outgoing_email_configured(),
         "sms_configured": _sms_configured(),
         "user_mobile_field": "mobile_no",
         "delivery_log": "Notification Delivery",
-        "email_provider": "Frappe Email Queue / Email Account",
+        "template_doctype": "Grovity Notification Template",
+        "template_count": len(existing_templates),
+        "email_provider": "Frappe Email Queue / Default Outgoing Email Account",
         "sms_provider": "Frappe SMS Settings / send_sms hook",
     }
     print(result)
