@@ -1,0 +1,149 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "PRPT-.#####",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "project",
+    "period",
+    "progress_percent",
+    "completed",
+    "in_progress",
+    "issues",
+    "risks",
+    "next_actions",
+    "submitted_by",
+    "approval_status",
+    "manager_comment",
+    "submitted_at",
+    "approved_by",
+    "approved_at"
+  ],
+  "fields": [
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Project",
+      "options": "Project",
+      "reqd": 1,
+      "search_index": 1
+    },
+    {
+      "fieldname": "period",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Period",
+      "reqd": 1
+    },
+    {
+      "fieldname": "progress_percent",
+      "fieldtype": "Percent",
+      "in_list_view": 1,
+      "label": "Progress Percent",
+      "reqd": 1
+    },
+    {
+      "fieldname": "completed",
+      "fieldtype": "Text Editor",
+      "label": "Completed"
+    },
+    {
+      "fieldname": "in_progress",
+      "fieldtype": "Text Editor",
+      "label": "In Progress"
+    },
+    {
+      "fieldname": "issues",
+      "fieldtype": "Text Editor",
+      "label": "Issues"
+    },
+    {
+      "fieldname": "risks",
+      "fieldtype": "Text Editor",
+      "label": "Risks"
+    },
+    {
+      "fieldname": "next_actions",
+      "fieldtype": "Text Editor",
+      "label": "Next Actions"
+    },
+    {
+      "fieldname": "submitted_by",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Submitted By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "default": "Draft",
+      "fieldname": "approval_status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Approval Status",
+      "options": "Draft\nSubmitted\nApproved\nRevision Requested",
+      "read_only": 1
+    },
+    {
+      "fieldname": "manager_comment",
+      "fieldtype": "Small Text",
+      "label": "Manager Comment",
+      "read_only": 1
+    },
+    {
+      "fieldname": "submitted_at",
+      "fieldtype": "Datetime",
+      "label": "Submitted At",
+      "read_only": 1
+    },
+    {
+      "fieldname": "approved_by",
+      "fieldtype": "Link",
+      "label": "Approved By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "approved_at",
+      "fieldtype": "Datetime",
+      "label": "Approved At",
+      "read_only": 1
+    }
+  ],
+  "index_web_pages_for_search": 0,
+  "links": [],
+  "module": "Company Core",
+  "name": "Progress Report",
+  "naming_rule": "Expression",
+  "permissions": [
+    {
+      "create": 1,
+      "read": 1,
+      "role": "Company User",
+      "select": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "read": 1,
+      "role": "Company Owner",
+      "select": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "read": 1,
+      "role": "System Manager",
+      "select": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}

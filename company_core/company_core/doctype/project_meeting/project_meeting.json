@@ -1,0 +1,123 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "PMTG-.#####",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "project",
+    "meeting_datetime",
+    "participants",
+    "agenda",
+    "summary",
+    "decisions",
+    "prepared_by",
+    "pm_confirmation",
+    "ceo_confirmation",
+    "status"
+  ],
+  "fields": [
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Project",
+      "options": "Project",
+      "reqd": 1,
+      "search_index": 1
+    },
+    {
+      "fieldname": "meeting_datetime",
+      "fieldtype": "Datetime",
+      "in_list_view": 1,
+      "label": "Meeting Date & Time",
+      "reqd": 1
+    },
+    {
+      "fieldname": "participants",
+      "fieldtype": "Table",
+      "label": "Participants",
+      "options": "Meeting Participant"
+    },
+    {
+      "fieldname": "agenda",
+      "fieldtype": "Text Editor",
+      "label": "Agenda"
+    },
+    {
+      "fieldname": "summary",
+      "fieldtype": "Text Editor",
+      "label": "Summary"
+    },
+    {
+      "fieldname": "decisions",
+      "fieldtype": "Text Editor",
+      "label": "Decisions"
+    },
+    {
+      "fieldname": "prepared_by",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Prepared By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "pm_confirmation",
+      "fieldtype": "Check",
+      "label": "PM Confirmation",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "ceo_confirmation",
+      "fieldtype": "Check",
+      "label": "CEO Confirmation",
+      "read_only": 1
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nPM Confirmed\nFinal",
+      "read_only": 1
+    }
+  ],
+  "index_web_pages_for_search": 0,
+  "links": [],
+  "module": "Company Core",
+  "name": "Project Meeting",
+  "naming_rule": "Expression",
+  "permissions": [
+    {
+      "create": 1,
+      "read": 1,
+      "role": "Company User",
+      "select": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "read": 1,
+      "role": "Company Owner",
+      "select": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "read": 1,
+      "role": "System Manager",
+      "select": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "meeting_datetime",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}

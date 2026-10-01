@@ -1,0 +1,122 @@
+{
+  "actions": [],
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "channels_section",
+    "enable_in_app",
+    "enable_email",
+    "enable_sms",
+    "email_section",
+    "email_from_name",
+    "sms_section",
+    "sms_t7",
+    "sms_t3",
+    "sms_t1",
+    "sms_due_date",
+    "sms_overdue",
+    "reliability_section",
+    "retry_limit"
+  ],
+  "fields": [
+    {
+      "fieldname": "channels_section",
+      "fieldtype": "Section Break",
+      "label": "Channels"
+    },
+    {
+      "default": "1",
+      "fieldname": "enable_in_app",
+      "fieldtype": "Check",
+      "label": "Enable In-App"
+    },
+    {
+      "default": "0",
+      "fieldname": "enable_email",
+      "fieldtype": "Check",
+      "label": "Enable Email"
+    },
+    {
+      "default": "0",
+      "fieldname": "enable_sms",
+      "fieldtype": "Check",
+      "label": "Enable SMS"
+    },
+    {
+      "fieldname": "email_section",
+      "fieldtype": "Section Break",
+      "label": "Email"
+    },
+    {
+      "default": "Grovity Project Management",
+      "fieldname": "email_from_name",
+      "fieldtype": "Data",
+      "label": "Email From Name"
+    },
+    {
+      "fieldname": "sms_section",
+      "fieldtype": "Section Break",
+      "label": "SMS Policy"
+    },
+    {
+      "default": "0",
+      "fieldname": "sms_t7",
+      "fieldtype": "Check",
+      "label": "SMS at T-7"
+    },
+    {
+      "default": "0",
+      "fieldname": "sms_t3",
+      "fieldtype": "Check",
+      "label": "SMS at T-3"
+    },
+    {
+      "default": "1",
+      "fieldname": "sms_t1",
+      "fieldtype": "Check",
+      "label": "SMS at T-1"
+    },
+    {
+      "default": "1",
+      "fieldname": "sms_due_date",
+      "fieldtype": "Check",
+      "label": "SMS on Due Date"
+    },
+    {
+      "default": "1",
+      "fieldname": "sms_overdue",
+      "fieldtype": "Check",
+      "label": "SMS when Overdue"
+    },
+    {
+      "fieldname": "reliability_section",
+      "fieldtype": "Section Break",
+      "label": "Reliability"
+    },
+    {
+      "default": "3",
+      "fieldname": "retry_limit",
+      "fieldtype": "Int",
+      "label": "Retry Limit"
+    }
+  ],
+  "index_web_pages_for_search": 0,
+  "issingle": 1,
+  "links": [],
+  "module": "Company Core",
+  "name": "Grovity Notification Settings",
+  "permissions": [
+    {
+      "read": 1,
+      "role": "Company Owner",
+      "write": 1
+    },
+    {
+      "read": 1,
+      "role": "System Manager",
+      "write": 1
+    }
+  ],
+  "states": [],
+  "track_changes": 1
+}

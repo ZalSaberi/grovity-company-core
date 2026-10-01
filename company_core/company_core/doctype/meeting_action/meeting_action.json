@@ -1,0 +1,118 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "MACT-.#####",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "project",
+    "meeting",
+    "description",
+    "assigned_to",
+    "deadline",
+    "priority",
+    "status",
+    "linked_task"
+  ],
+  "fields": [
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Project",
+      "options": "Project",
+      "reqd": 1,
+      "search_index": 1
+    },
+    {
+      "fieldname": "meeting",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Project Meeting",
+      "options": "Project Meeting",
+      "reqd": 1
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Small Text",
+      "in_list_view": 1,
+      "label": "Description",
+      "reqd": 1
+    },
+    {
+      "fieldname": "assigned_to",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Assigned To",
+      "options": "User",
+      "reqd": 1,
+      "search_index": 1
+    },
+    {
+      "fieldname": "deadline",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Deadline",
+      "reqd": 1
+    },
+    {
+      "default": "Medium",
+      "fieldname": "priority",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Priority",
+      "options": "Low\nMedium\nHigh\nUrgent",
+      "reqd": 1
+    },
+    {
+      "default": "Open",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Open\nIn Progress\nCompleted\nCancelled",
+      "reqd": 1
+    },
+    {
+      "fieldname": "linked_task",
+      "fieldtype": "Link",
+      "label": "Linked Task",
+      "options": "Task",
+      "read_only": 1
+    }
+  ],
+  "index_web_pages_for_search": 0,
+  "links": [],
+  "module": "Company Core",
+  "name": "Meeting Action",
+  "naming_rule": "Expression",
+  "permissions": [
+    {
+      "create": 1,
+      "read": 1,
+      "role": "Company User",
+      "select": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "read": 1,
+      "role": "Company Owner",
+      "select": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "read": 1,
+      "role": "System Manager",
+      "select": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "deadline",
+  "sort_order": "ASC",
+  "states": [],
+  "track_changes": 1
+}

@@ -1,0 +1,162 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "NDLV-.#####",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "event_key",
+    "source_doctype",
+    "source_name",
+    "project",
+    "stage",
+    "channel",
+    "recipient_user",
+    "destination",
+    "subject",
+    "message",
+    "status",
+    "attempt_count",
+    "provider_reference",
+    "queued_at",
+    "last_attempt_at",
+    "sent_at",
+    "last_error"
+  ],
+  "fields": [
+    {
+      "fieldname": "event_key",
+      "fieldtype": "Data",
+      "label": "Event Key",
+      "read_only": 1,
+      "unique": 1
+    },
+    {
+      "fieldname": "source_doctype",
+      "fieldtype": "Link",
+      "label": "Source DocType",
+      "options": "DocType",
+      "read_only": 1
+    },
+    {
+      "fieldname": "source_name",
+      "fieldtype": "Dynamic Link",
+      "label": "Source",
+      "options": "source_doctype",
+      "read_only": 1
+    },
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "label": "Project",
+      "options": "Project",
+      "read_only": 1
+    },
+    {
+      "fieldname": "stage",
+      "fieldtype": "Select",
+      "label": "Stage",
+      "options": "T-7\nT-3\nT-1\nDue Date\nOverdue",
+      "read_only": 1
+    },
+    {
+      "fieldname": "channel",
+      "fieldtype": "Select",
+      "label": "Channel",
+      "options": "In-App\nEmail\nSMS",
+      "read_only": 1
+    },
+    {
+      "fieldname": "recipient_user",
+      "fieldtype": "Link",
+      "label": "Recipient User",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "destination",
+      "fieldtype": "Data",
+      "label": "Destination",
+      "read_only": 1
+    },
+    {
+      "fieldname": "subject",
+      "fieldtype": "Small Text",
+      "label": "Subject",
+      "read_only": 1
+    },
+    {
+      "fieldname": "message",
+      "fieldtype": "Long Text",
+      "label": "Message",
+      "read_only": 1
+    },
+    {
+      "default": "Pending",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Pending\nQueued\nSent\nFailed\nSkipped",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "attempt_count",
+      "fieldtype": "Int",
+      "label": "Attempt Count",
+      "read_only": 1
+    },
+    {
+      "fieldname": "provider_reference",
+      "fieldtype": "Data",
+      "label": "Provider Reference",
+      "read_only": 1
+    },
+    {
+      "fieldname": "queued_at",
+      "fieldtype": "Datetime",
+      "label": "Queued At",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_attempt_at",
+      "fieldtype": "Datetime",
+      "label": "Last Attempt At",
+      "read_only": 1
+    },
+    {
+      "fieldname": "sent_at",
+      "fieldtype": "Datetime",
+      "label": "Sent At",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_error",
+      "fieldtype": "Long Text",
+      "label": "Last Error",
+      "read_only": 1
+    }
+  ],
+  "index_web_pages_for_search": 0,
+  "links": [],
+  "module": "Company Core",
+  "name": "Notification Delivery",
+  "naming_rule": "Expression",
+  "permissions": [
+    {
+      "read": 1,
+      "role": "Company Owner",
+      "select": 1
+    },
+    {
+      "read": 1,
+      "role": "System Manager",
+      "select": 1
+    }
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 0
+}

@@ -437,3 +437,98 @@ doctype_js.update(
     }
 )
 
+# === GROVITY PHASE 3 OPERATIONS ===
+
+permission_query_conditions = globals().get(
+    "permission_query_conditions",
+    {},
+)
+
+permission_query_conditions.update(
+    {
+        "Project Meeting": (
+            "company_core.operations_permissions."
+            "get_project_meeting_permission_query_conditions"
+        ),
+        "Meeting Action": (
+            "company_core.operations_permissions."
+            "get_meeting_action_permission_query_conditions"
+        ),
+        "Progress Report": (
+            "company_core.operations_permissions."
+            "get_progress_report_permission_query_conditions"
+        ),
+    }
+)
+
+has_permission = globals().get(
+    "has_permission",
+    {},
+)
+
+has_permission.update(
+    {
+        "Project Meeting": (
+            "company_core.operations_permissions."
+            "has_project_meeting_permission"
+        ),
+        "Meeting Action": (
+            "company_core.operations_permissions."
+            "has_meeting_action_permission"
+        ),
+        "Progress Report": (
+            "company_core.operations_permissions."
+            "has_progress_report_permission"
+        ),
+    }
+)
+
+doctype_js = globals().get(
+    "doctype_js",
+    {},
+)
+
+doctype_js.update(
+    {
+        "Project Meeting": "public/js/project_meeting.js",
+        "Meeting Action": "public/js/meeting_action.js",
+        "Progress Report": "public/js/progress_report.js",
+    }
+)
+
+scheduler_events = globals().get(
+    "scheduler_events",
+    {},
+)
+
+scheduler_events.setdefault(
+    "daily",
+    [],
+)
+
+_phase3_notification_job = (
+    "company_core.operations_notifications."
+    "process_due_notifications"
+)
+
+if _phase3_notification_job not in scheduler_events["daily"]:
+    scheduler_events["daily"].append(
+        _phase3_notification_job
+    )
+
+# === /GROVITY PHASE 3 OPERATIONS ===
+
+# === GROVITY PHASE 3 NOTIFICATION HARDENING ===
+
+scheduler_events = globals().get("scheduler_events", {})
+scheduler_events.setdefault("hourly", [])
+
+_phase3_notification_hourly_jobs = [
+    "company_core.notification_engine.reconcile_email_deliveries",
+    "company_core.notification_engine.retry_failed_deliveries",
+]
+
+for _phase3_notification_job in _phase3_notification_hourly_jobs:
+    if _phase3_notification_job not in scheduler_events["hourly"]:
+        scheduler_events["hourly"].append(_phase3_notification_job)
+
