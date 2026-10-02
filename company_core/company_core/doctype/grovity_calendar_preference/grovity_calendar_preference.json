@@ -1,0 +1,39 @@
+{
+  "doctype": "DocType",
+  "name": "Grovity Calendar Preference",
+  "module": "Company Core",
+  "autoname": "field:user",
+  "title_field": "user",
+  "track_changes": 1,
+  "field_order": [
+    "user",
+    "allow_meeting_requests",
+    "working_days",
+    "workday_start",
+    "workday_end",
+    "slot_minutes",
+    "retention_section",
+    "retain_permanently",
+    "retention_days",
+    "monthly_summary_email"
+  ],
+  "fields": [
+    {"fieldname": "user", "fieldtype": "Link", "label": "User", "options": "User", "reqd": 1, "unique": 1, "in_list_view": 1},
+    {"fieldname": "allow_meeting_requests", "fieldtype": "Check", "label": "Allow Meeting Requests", "default": "1"},
+    {"fieldname": "working_days", "fieldtype": "Data", "label": "Working Days", "default": "Saturday,Sunday,Monday,Tuesday,Wednesday,Thursday", "description": "Comma-separated English weekday names."},
+    {"fieldname": "workday_start", "fieldtype": "Time", "label": "Workday Start", "default": "09:00:00", "reqd": 1},
+    {"fieldname": "workday_end", "fieldtype": "Time", "label": "Workday End", "default": "18:00:00", "reqd": 1},
+    {"fieldname": "slot_minutes", "fieldtype": "Int", "label": "Slot Minutes", "default": "30", "reqd": 1},
+    {"fieldname": "retention_section", "fieldtype": "Section Break", "label": "Retention"},
+    {"fieldname": "retain_permanently", "fieldtype": "Check", "label": "Retain Personal Calendar Permanently", "default": "0"},
+    {"fieldname": "retention_days", "fieldtype": "Int", "label": "Personal Calendar Retention Days", "default": "30"},
+    {"fieldname": "monthly_summary_email", "fieldtype": "Check", "label": "Send Monthly Calendar Summary", "default": "1"}
+  ],
+  "permissions": [
+    {"role": "Company User", "read": 1, "write": 1, "create": 1, "report": 1},
+    {"role": "Company Owner", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1},
+    {"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1}
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC"
+}

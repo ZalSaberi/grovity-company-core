@@ -532,3 +532,67 @@ for _phase3_notification_job in _phase3_notification_hourly_jobs:
     if _phase3_notification_job not in scheduler_events["hourly"]:
         scheduler_events["hourly"].append(_phase3_notification_job)
 
+# === GROVITY PHASE 3C — CALENDAR & MEETING REQUESTS ===
+
+def _phase3c_append_doc_event(doctype, event, method):
+    global doc_events
+    doc_events = globals().get("doc_events", {})
+    doc_events.setdefault(doctype, {})
+    existing = doc_events[doctype].get(event)
+    if not existing:
+        doc_events[doctype][event] = method
+    elif isinstance(existing, list):
+        if method not in existing:
+            existing.append(method)
+    elif existing != method:
+        doc_events[doctype][event] = [existing, method]
+
+
+permission_query_conditions = globals().get("permission_query_conditions", {})
+permission_query_conditions.update(
+    {
+        "Meeting Request": "company_core.calendar_permissions.get_meeting_request_permission_query_conditions",
+        "Grovity Calendar Preference": "company_core.calendar_permissions.get_calendar_preference_permission_query_conditions",
+    }
+)
+
+has_permission = globals().get("has_permission", {})
+has_permission.update(
+    {
+        "Meeting Request": "company_core.calendar_permissions.has_meeting_request_permission",
+        "Grovity Calendar Preference": "company_core.calendar_permissions.has_calendar_preference_permission",
+    }
+)
+
+doctype_js = globals().get("doctype_js", {})
+doctype_js.update(
+    {
+        "Event": "public/js/event_grovity.js",
+        "Meeting Request": "public/js/meeting_request.js",
+    }
+)
+
+_phase3c_append_doc_event("Event", "validate", "company_core.calendar_sync.validate_grovity_event")
+_phase3c_append_doc_event("Task", "on_update", "company_core.calendar_sync.sync_task_calendar")
+_phase3c_append_doc_event("Task", "on_trash", "company_core.calendar_sync.archive_source_event")
+_phase3c_append_doc_event("Project Meeting", "on_update", "company_core.calendar_sync.sync_project_meeting_calendar")
+_phase3c_append_doc_event("Project Meeting", "on_trash", "company_core.calendar_sync.archive_source_event")
+_phase3c_append_doc_event("Meeting Action", "on_update", "company_core.calendar_sync.sync_meeting_action_calendar")
+_phase3c_append_doc_event("Meeting Action", "on_trash", "company_core.calendar_sync.archive_source_event")
+_phase3c_append_doc_event("Project Membership", "on_update", "company_core.calendar_sync.resync_project_calendar_access")
+_phase3c_append_doc_event("Project Membership", "on_trash", "company_core.calendar_sync.resync_project_calendar_access_on_trash")
+
+scheduler_events = globals().get("scheduler_events", {})
+scheduler_events.setdefault("monthly", [])
+_phase3c_monthly_job = "company_core.calendar_service.process_monthly_calendar_lifecycle"
+if _phase3c_monthly_job not in scheduler_events["monthly"]:
+    scheduler_events["monthly"].append(_phase3c_monthly_job)
+
+after_migrate = globals().get("after_migrate", [])
+if isinstance(after_migrate, str):
+    after_migrate = [after_migrate]
+_phase3c_after_migrate = "company_core.calendar_setup.ensure_calendar_custom_fields"
+if _phase3c_after_migrate not in after_migrate:
+    after_migrate.append(_phase3c_after_migrate)
+
+# === END GROVITY PHASE 3C ===

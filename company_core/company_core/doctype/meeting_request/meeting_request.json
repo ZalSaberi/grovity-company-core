@@ -1,0 +1,42 @@
+{
+  "doctype": "DocType",
+  "name": "Meeting Request",
+  "module": "Company Core",
+  "autoname": "MRQ-.#####",
+  "title_field": "subject",
+  "track_changes": 1,
+  "field_order": [
+    "requester", "target_user", "subject", "related_project", "meeting_mode",
+    "schedule_section", "preferred_start", "preferred_end", "duration_minutes", "priority", "discussion_points",
+    "workflow_section", "status", "alternative_start", "alternative_end", "response_note", "responded_by", "responded_at", "scheduled_event", "project_meeting"
+  ],
+  "fields": [
+    {"fieldname": "requester", "fieldtype": "Link", "label": "Requester", "options": "User", "reqd": 1, "read_only": 1, "in_list_view": 1},
+    {"fieldname": "target_user", "fieldtype": "Link", "label": "Meeting With", "options": "User", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "subject", "fieldtype": "Data", "label": "Subject", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "related_project", "fieldtype": "Link", "label": "Related Project", "options": "Project", "in_list_view": 1},
+    {"fieldname": "meeting_mode", "fieldtype": "Select", "label": "Meeting Mode", "options": "Calendar Event\nProject Meeting", "default": "Calendar Event", "reqd": 1},
+    {"fieldname": "schedule_section", "fieldtype": "Section Break", "label": "Preferred Schedule"},
+    {"fieldname": "preferred_start", "fieldtype": "Datetime", "label": "Preferred Start", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "preferred_end", "fieldtype": "Datetime", "label": "Preferred End"},
+    {"fieldname": "duration_minutes", "fieldtype": "Int", "label": "Duration (Minutes)", "default": "30", "reqd": 1},
+    {"fieldname": "priority", "fieldtype": "Select", "label": "Priority", "options": "Low\nNormal\nHigh\nUrgent", "default": "Normal", "reqd": 1},
+    {"fieldname": "discussion_points", "fieldtype": "Text Editor", "label": "Discussion Points"},
+    {"fieldname": "workflow_section", "fieldtype": "Section Break", "label": "Workflow"},
+    {"fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Requested\nAlternative Proposed\nScheduled\nRejected\nCancelled", "default": "Requested", "reqd": 1, "read_only": 1, "in_list_view": 1},
+    {"fieldname": "alternative_start", "fieldtype": "Datetime", "label": "Alternative Start", "read_only": 1},
+    {"fieldname": "alternative_end", "fieldtype": "Datetime", "label": "Alternative End", "read_only": 1},
+    {"fieldname": "response_note", "fieldtype": "Small Text", "label": "Response Note", "read_only": 1},
+    {"fieldname": "responded_by", "fieldtype": "Link", "label": "Responded By", "options": "User", "read_only": 1},
+    {"fieldname": "responded_at", "fieldtype": "Datetime", "label": "Responded At", "read_only": 1},
+    {"fieldname": "scheduled_event", "fieldtype": "Link", "label": "Scheduled Event", "options": "Event", "read_only": 1},
+    {"fieldname": "project_meeting", "fieldtype": "Link", "label": "Project Meeting", "options": "Project Meeting", "read_only": 1}
+  ],
+  "permissions": [
+    {"role": "Company User", "read": 1, "write": 1, "create": 1, "report": 1},
+    {"role": "Company Owner", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1},
+    {"role": "System Manager", "read": 1, "write": 1, "create": 1, "delete": 1, "report": 1, "export": 1}
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC"
+}
